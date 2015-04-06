@@ -1,10 +1,17 @@
 package com.katgstudios.abhishyant.wakespeak;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.provider.AlarmClock;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,11 +22,13 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.Locale;
 
 public class AlarmActivity extends ActionBarActivity implements OnInitListener{
     private int MY_DATA_CHECK_CODE = 0;
     private TextToSpeech mTTS;
+    private PendingIntent alarmPendingIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +43,28 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
         Intent checkTTSIntent = new Intent();
         checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
+        Intent alarmIntent = new Intent(this,AlarmReceiver.class);
+        alarmPendingIntent = PendingIntent.getBroadcast(this,0,alarmIntent,0);
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        int interval = 1000 * 60 * 20;
+
+        /* Set the alarm to start at 10:30 AM */
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 16);
+        calendar.set(Calendar.MINUTE, 43);
+
+        /* Repeating on every 20 minutes interval */
+        manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                 alarmPendingIntent);
+        registerReceiver(receiver, new IntentFilter("SPEAK"));
     }
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            speak();
+        }
+    };
 
     //SPEAK
     public void speak(){
@@ -45,8 +75,8 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
     @Override
     public void onInit(int initStatus){
         if(initStatus == TextToSpeech.SUCCESS){
-            mTTS.setLanguage(Locale.UK);
-            mTTS.setPitch(1.0f);
+            mTTS.setLanguage(Locale.US);
+            mTTS.setPitch(1.3f);
         }
         else if(initStatus == TextToSpeech.ERROR){
             Toast.makeText(this,"Please Try Again",Toast.LENGTH_LONG).show();
@@ -92,6 +122,10 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
 
 
     }
+    protected void onDestroy(){
+        super.onDestroy();
+        unregisterReceiver(receiver);
+    }
 
 
     /**
@@ -106,6 +140,7 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_alarm, container, false);
+
             return rootView;
         }
     }
