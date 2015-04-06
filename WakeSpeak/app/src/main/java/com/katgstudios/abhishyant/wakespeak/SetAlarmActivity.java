@@ -11,7 +11,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.CheckBox;
 import android.widget.NumberPicker;
+import android.widget.ToggleButton;
+
+import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class SetAlarmActivity extends ActionBarActivity {
@@ -57,6 +62,15 @@ public class SetAlarmActivity extends ActionBarActivity {
         private  NumberPicker mHourPicker;
         private NumberPicker mMinutePicker;
         private NumberPicker mAMPMPicker;
+        private ToggleButton mSunToggle;
+        private ToggleButton mMonToggle;
+        private ToggleButton mTuesToggle;
+        private ToggleButton mWedToggle;
+        private ToggleButton mThursToggle;
+        private ToggleButton mFriToggle;
+        private ToggleButton mSatToggle;
+        private ArrayList<ToggleButton> weekdayButtons;
+        private CheckBox mRepeatCheckBox;
         public PlaceholderFragment() {
         }
 
@@ -64,13 +78,30 @@ public class SetAlarmActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_set_alarm, container, false);
+            initNumberPickers(rootView);
+            initWeekdayToggles(rootView);
+            initRepeatCheckBox(rootView);
+
+
+
+
+
+            return rootView;
+
+        }
+        private void initNumberPickers(View rootView){
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
             mHourPicker = (NumberPicker) rootView.findViewById(R.id.hourPicker);
             mHourPicker.setMinValue(1);
             mHourPicker.setMaxValue(12);
+            mHourPicker.setValue(calendar.get(Calendar.HOUR));
             mMinutePicker = (NumberPicker) rootView.findViewById(R.id.minutePicker);
             mMinutePicker.setMinValue(0);
             mMinutePicker.setMaxValue(59);
-           mAMPMPicker = (NumberPicker) rootView.findViewById(R.id.AMPMPicker);
+            mMinutePicker.setValue(calendar.get(Calendar.MINUTE));
+            mAMPMPicker = (NumberPicker) rootView.findViewById(R.id.AMPMPicker);
+
 
 
             NumberPicker.Formatter minFormatter = new NumberPicker.Formatter() {
@@ -92,11 +123,12 @@ public class SetAlarmActivity extends ActionBarActivity {
                 }
             };
 
-
+            String[] AMPMVals = {"AM","PM"};
             mAMPMPicker.setMinValue(0);
             mAMPMPicker.setMaxValue(1);
-            mAMPMPicker.setValue(0);
-            mAMPMPicker.setFormatter(AMPMFormatter);
+            mAMPMPicker.setDisplayedValues(AMPMVals);
+            mAMPMPicker.setValue(calendar.get(Calendar.AM_PM));
+            //mAMPMPicker.setFormatter(AMPMFormatter);
             mAMPMPicker.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -105,16 +137,32 @@ public class SetAlarmActivity extends ActionBarActivity {
             });
             mMinutePicker.setFormatter(minFormatter);
 
-
-
-
-
-            return rootView;
-
         }
         public  void onValueChange(NumberPicker picker,int oldVal,int newVal){
            picker.setValue(newVal);
 
+        }
+        private void initWeekdayToggles(View rootView){
+            weekdayButtons = new ArrayList<ToggleButton>();
+            mSunToggle = (ToggleButton)rootView.findViewById(R.id.sunToggle);
+            weekdayButtons.add(mSunToggle);
+            mMonToggle = (ToggleButton)rootView.findViewById(R.id.monToggle);
+            weekdayButtons.add(mMonToggle);
+            mTuesToggle = (ToggleButton)rootView.findViewById(R.id.tuesToggle);
+            weekdayButtons.add(mTuesToggle);
+            mWedToggle = (ToggleButton)rootView.findViewById(R.id.wedToggle);
+            weekdayButtons.add(mWedToggle);
+            mThursToggle = (ToggleButton)rootView.findViewById(R.id.thursToggle);
+            weekdayButtons.add(mThursToggle);
+            mFriToggle = (ToggleButton)rootView.findViewById(R.id.friToggle);
+            weekdayButtons.add(mFriToggle);
+            mSatToggle = (ToggleButton)rootView.findViewById(R.id.satToggle);
+            weekdayButtons.add(mSatToggle);
+
+
+        }
+        private void initRepeatCheckBox(View rootView){
+            mRepeatCheckBox = (CheckBox) rootView.findViewById(R.id.repeatCheckBox);
         }
 
     }

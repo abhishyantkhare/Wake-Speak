@@ -44,7 +44,7 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
         checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
         Intent alarmIntent = new Intent(this,AlarmReceiver.class);
-        alarmPendingIntent = PendingIntent.getBroadcast(this,0,alarmIntent,0);
+        alarmPendingIntent = PendingIntent.getBroadcast(this,1,alarmIntent,0);
         //int hour =29;
        // setAlarm(hour,10,true);
        // Log.d("TIME MINUTES",Integer.toString(hour));
@@ -70,6 +70,11 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
 
         manager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 alarmPendingIntent);
+
+    }
+
+    public static void addAlarm(String alarmName, String[] weekdays, int hour, int minute, boolean AMPM, boolean repeating){
+
 
     }
 
@@ -116,6 +121,7 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
         if(id == R.id.action_addalarm){
             Intent createAlarmIntent = new Intent(this,SetAlarmActivity.class);
             startActivity(createAlarmIntent);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

@@ -34,6 +34,124 @@
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/minutePicker"
          />
+    <TextView
+        android:text=":"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/hourPicker"
+        android:layout_toLeftOf="@+id/minutePicker"
+        android:layout_marginRight="11dp"
+        android:layout_marginTop="100px"
+        android:textSize="32pt"
+        android:id="@+id/textView" />
+
+
+
+
+        <ToggleButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:textOn="S"
+            android:textOff="S"
+            android:id="@+id/sunToggle"
+            android:layout_below="@+id/textView"
+
+            android:layout_marginLeft="5dp"
+
+            android:layout_marginTop="59dp" />
+    <ToggleButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:textOn="M"
+        android:textOff="M"
+        android:id="@+id/monToggle"
+        android:layout_below="@+id/textView"
+        android:layout_alignLeft="@+id/sunToggle"
+        android:layout_marginLeft="45dp"
+
+        android:layout_marginTop="59dp" />
+    <ToggleButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:textOn="T"
+        android:textOff="T"
+        android:id="@+id/tuesToggle"
+        android:layout_below="@+id/textView"
+        android:layout_alignLeft="@+id/monToggle"
+        android:layout_marginLeft="45dp"
+
+        android:layout_marginTop="59dp" />
+    <ToggleButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:textOn="W"
+        android:textOff="W"
+        android:id="@+id/wedToggle"
+        android:layout_below="@+id/textView"
+        android:layout_alignLeft="@+id/tuesToggle"
+        android:layout_marginLeft="45dp"
+
+        android:layout_marginTop="59dp" />
+    <ToggleButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:textOn="T"
+        android:textOff="T"
+        android:id="@+id/thursToggle"
+        android:layout_below="@+id/textView"
+        android:layout_alignLeft="@+id/wedToggle"
+        android:layout_marginLeft="45dp"
+
+        android:layout_marginTop="59dp" />
+    <ToggleButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:textOn="F"
+        android:textOff="F"
+        android:id="@+id/friToggle"
+        android:layout_below="@+id/textView"
+        android:layout_alignLeft="@+id/thursToggle"
+        android:layout_marginLeft="45dp"
+
+        android:layout_marginTop="59dp" />
+    <ToggleButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:textOn="S"
+        android:textOff="S"
+        android:id="@+id/satToggle"
+        android:layout_below="@+id/textView"
+        android:layout_alignLeft="@+id/friToggle"
+        android:layout_marginLeft="45dp"
+
+        android:layout_marginTop="59dp" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Repeat Weekly"
+        android:id="@+id/repeatCheckBox"
+        android:layout_below="@+id/sunToggle"
+        android:layout_alignLeft="@+id/sunToggle"
+        android:layout_alignStart="@+id/sunToggle" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Alarm Name"
+        android:id="@+id/alarmNameText"
+        android:layout_marginBottom="42dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/checkBox"
+        android:layout_alignStart="@+id/checkBox" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set Alarm"
+        android:id="@+id/setAlarmButton"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>
