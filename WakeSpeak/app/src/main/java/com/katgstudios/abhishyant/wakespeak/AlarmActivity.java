@@ -37,7 +37,7 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
         setContentView(R.layout.activity_alarm);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new AlarmFragment())
                     .commit();
         }
         Intent checkTTSIntent = new Intent();
@@ -60,18 +60,14 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
         //comment for git testing
         registerReceiver(receiver, new IntentFilter("SPEAK"));
     }
-    BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            speak();
-        }
-    };
+
 
     //SPEAK
     public void speak(){
         mTTS.speak("Hello ahbeeshant!", TextToSpeech.QUEUE_FLUSH,null);
 
     }
+
 
     @Override
     public void onInit(int initStatus){
@@ -83,6 +79,12 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
             Toast.makeText(this,"Please Try Again",Toast.LENGTH_LONG).show();
         }
     }
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            speak();
+        }
+    };
 
 
     @Override
@@ -132,17 +134,5 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
 
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_alarm, container, false);
-
-            return rootView;
-        }
-    }
 }
