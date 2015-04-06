@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.katgstudios.abhishyant.wakespeak" >
-    <uses-sdk android:minSdkVersion="19"></uses-sdk>
+
+    <uses-sdk android:minSdkVersion="19" />
+
+    <android:uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
 
     <application
         android:allowBackup="true"
@@ -23,6 +32,15 @@
             android:enabled="true"
             android:exported="true" >
         </receiver>
+
+        <activity
+            android:name=".SetAlarmActivity"
+            android:label="@string/title_activity_set_alarm"
+            android:parentActivityName=".AlarmActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.katgstudios.abhishyant.wakespeak.AlarmActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -5,4 +5,5 @@
     <string name="alarm_activity_name">Alarms</string>
     <string name="alarm_list">Alarm_List</string>
     <string name="add_alarm">Add Alarm</string>
+    <string name="title_activity_set_alarm">SetAlarmActivity</string>
 </resources>

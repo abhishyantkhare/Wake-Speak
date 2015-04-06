@@ -45,20 +45,32 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
         startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
         Intent alarmIntent = new Intent(this,AlarmReceiver.class);
         alarmPendingIntent = PendingIntent.getBroadcast(this,0,alarmIntent,0);
-        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        int interval = 1000 * 60 * 20;
-
-        /* Set the alarm to start at 10:30 AM */
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 16);
-        calendar.set(Calendar.MINUTE, 43);
-
-        /* Repeating on every 20 minutes interval */
-        manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                 alarmPendingIntent);
+        //int hour =29;
+       // setAlarm(hour,10,true);
+       // Log.d("TIME MINUTES",Integer.toString(hour));
         //comment for git testing
         registerReceiver(receiver, new IntentFilter("SPEAK"));
+    }
+
+    public void setAlarm(int minute, int hour, boolean isPM){
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        if(isPM && hour>=1) {
+
+
+            hour += 12;
+            Log.d("HOUR",Integer.toString(hour));
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND,0);
+
+
+        manager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                alarmPendingIntent);
+
     }
 
 
@@ -79,12 +91,7 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
             Toast.makeText(this,"Please Try Again",Toast.LENGTH_LONG).show();
         }
     }
-    BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            speak();
-        }
-    };
+
 
 
     @Override
@@ -106,6 +113,10 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
             speak();
             return true;
         }
+        if(id == R.id.action_addalarm){
+            Intent createAlarmIntent = new Intent(this,SetAlarmActivity.class);
+            startActivity(createAlarmIntent);
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -125,6 +136,12 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
 
 
     }
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            speak();
+        }
+    };
     protected void onDestroy(){
         super.onDestroy();
         unregisterReceiver(receiver);

@@ -3,6 +3,7 @@ package com.katgstudios.abhishyant.wakespeak;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 public class AlarmReceiver extends BroadcastReceiver {
@@ -12,6 +13,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // TODO: This method is called when the BroadcastReceiver is receiving
+        Log.d("BROADCAST", "received broadcast");
         // an Intent broadcast.
         context.sendBroadcast(new Intent("SPEAK"));
 
