@@ -57,6 +57,7 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
         /* Repeating on every 20 minutes interval */
         manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                  alarmPendingIntent);
+        //comment for git testing
         registerReceiver(receiver, new IntentFilter("SPEAK"));
     }
     BroadcastReceiver receiver = new BroadcastReceiver() {
