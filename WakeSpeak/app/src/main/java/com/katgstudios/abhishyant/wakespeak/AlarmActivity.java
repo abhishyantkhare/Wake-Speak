@@ -45,6 +45,9 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
         startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
         Intent alarmIntent = new Intent(this,AlarmReceiver.class);
         alarmPendingIntent = PendingIntent.getBroadcast(this,1,alarmIntent,0);
+        Intent setAlarmIntent = getIntent();
+        addAlarm(setAlarmIntent);
+
         //int hour =29;
        // setAlarm(hour,10,true);
        // Log.d("TIME MINUTES",Integer.toString(hour));
@@ -52,20 +55,25 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
         registerReceiver(receiver, new IntentFilter("SPEAK"));
     }
 
-    public void setAlarm(int minute, int hour, boolean isPM){
+    public void setAlarm(Calendar calendar){
+        int weekDay = calendar.get(Calendar.DAY_OF_WEEK);
+        int hour = calendar.get(Calendar.HOUR);
+        int minute = calendar.get(Calendar.MINUTE);
+        int AM_PM = calendar.get(Calendar.AM_PM);
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-        if(isPM && hour>=1) {
+        if(AM_PM == 1 && hour>=1) {
 
 
             hour += 12;
             Log.d("HOUR",Integer.toString(hour));
         }
-        Calendar calendar = Calendar.getInstance();
+
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.DAY_OF_WEEK,weekDay);
 
 
         manager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
@@ -73,10 +81,29 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
 
     }
 
-    public static void addAlarm(String alarmName, String[] weekdays, int hour, int minute, boolean AMPM, boolean repeating){
+    public void addAlarm(Intent setAlarmIntent){
+        if(setAlarmIntent.getParcelableExtra("Alarm") != null) {
+            AlarmObject alarm = setAlarmIntent.getParcelableExtra("Alarm");
+            for(int i = 0; i <7;i++) {
+                if(alarm.getWeekDays()[i]) {
 
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.HOUR, alarm.getHour());
+                    calendar.set(Calendar.MINUTE, alarm.getMinute());
+                    calendar.set(Calendar.AM_PM, alarm.getAM_PM());
+                    calendar.set(Calendar.DAY_OF_WEEK, i + 1);
+                    setAlarm(calendar);
+
+                }
+            }
+
+        }
+        else{
+            Log.d("Alarm Activity","INTENT NULL");
+        }
 
     }
+
 
 
     //SPEAK

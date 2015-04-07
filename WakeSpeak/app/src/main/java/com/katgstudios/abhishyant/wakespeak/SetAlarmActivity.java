@@ -1,9 +1,11 @@
 package com.katgstudios.abhishyant.wakespeak;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,7 +13,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.ToggleButton;
 
@@ -71,6 +75,8 @@ public class SetAlarmActivity extends ActionBarActivity {
         private ToggleButton mSatToggle;
         private ArrayList<ToggleButton> weekdayButtons;
         private CheckBox mRepeatCheckBox;
+        private EditText mAlarmName;
+        private Button mSetAlarmButton;
         public PlaceholderFragment() {
         }
 
@@ -81,6 +87,9 @@ public class SetAlarmActivity extends ActionBarActivity {
             initNumberPickers(rootView);
             initWeekdayToggles(rootView);
             initRepeatCheckBox(rootView);
+            initAlarmName(rootView);
+            initSetAlarmButton(rootView);
+
 
 
 
@@ -158,11 +167,44 @@ public class SetAlarmActivity extends ActionBarActivity {
             weekdayButtons.add(mFriToggle);
             mSatToggle = (ToggleButton)rootView.findViewById(R.id.satToggle);
             weekdayButtons.add(mSatToggle);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            weekdayButtons.get(calendar.get(Calendar.DAY_OF_WEEK)-1).performClick();
 
 
         }
         private void initRepeatCheckBox(View rootView){
             mRepeatCheckBox = (CheckBox) rootView.findViewById(R.id.repeatCheckBox);
+        }
+        private void initAlarmName(View rootView){
+            mAlarmName = (EditText) rootView.findViewById(R.id.alarmNameText);
+        }
+        private void initSetAlarmButton(View rootView){
+            mSetAlarmButton = (Button) rootView.findViewById(R.id.setAlarmButton);
+            mSetAlarmButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("SEND ALARM BUTTON",mAlarmName.getText().toString());
+                    Intent setAlarmIntent = new Intent(getActivity(),AlarmActivity.class);
+                    boolean[] selectedDays = new boolean[7];
+                    for(int i =0; i <7;i++){
+                        selectedDays[i] = weekdayButtons.get(i).isChecked();
+                    }
+                    String alarmName = "Alarm";
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(System.currentTimeMillis());
+                    if(!mAlarmName.getText().toString().equals(""))
+                        alarmName = mAlarmName.getText().toString();
+                    int hour = calendar.get(Calendar.HOUR);
+                    Log.d("SET ALARM",alarmName);
+                    int isRepeating = 0;
+                    if(mRepeatCheckBox.isChecked())
+                        isRepeating = 1;
+                    AlarmObject alarm = new AlarmObject(alarmName,selectedDays,mHourPicker.getValue(),mMinutePicker.getValue(),mAMPMPicker.getValue(),isRepeating);
+                    setAlarmIntent.putExtra("Alarm",alarm);
+                    startActivity(setAlarmIntent);
+                }
+            });
         }
 
     }
