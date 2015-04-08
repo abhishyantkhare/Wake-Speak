@@ -52,6 +52,7 @@ public class AlarmObject implements Parcelable{
 
     //Code for Parcelable
     public int describeContents(){
+         
         return 0;
     }
     public void writeToParcel(Parcel out, int flags){

@@ -15,5 +15,11 @@
         app:showAsAction = "always"
         android:icon="@drawable/ic_action_addalarm"
         />
+    <item
+        android:title="Share"
+        android:id="@+id/menu_item_share"
+        app:showAsAction="ifRoom"
+        app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+        />
 
 </menu>
