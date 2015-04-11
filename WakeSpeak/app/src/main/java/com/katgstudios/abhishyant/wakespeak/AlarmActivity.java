@@ -24,6 +24,13 @@ import android.speech.tts.TextToSpeech.OnInitListener;
 import android.support.v7.widget.ShareActionProvider;
 import android.widget.Toast;
 
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParsePush;
+import com.parse.PushService;
+import com.parse.SaveCallback;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -32,6 +39,7 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
     private TextToSpeech mTTS;
     private PendingIntent alarmPendingIntent;
     private ShareActionProvider mShare;
+    public static ArrayList<String> mAlarmData = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +51,7 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
                     .add(R.id.container, new AlarmFragment())
                     .commit();
         }
+
         Intent checkTTSIntent = new Intent();
         checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
@@ -50,6 +59,10 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
         alarmPendingIntent = PendingIntent.getBroadcast(this,1,alarmIntent,0);
         Intent setAlarmIntent = getIntent();
         addAlarm(setAlarmIntent);
+        //Parse.initialize(this, "KLPNm4OOkvYB3G8AMns1HwiPjNqPzJ0o0M0Nz2jO", "cZbvnOZuTwgONSzaL42LJhi39ENCAkEMp55DpSLA");
+        //PushService.setDefaultPushCallback(this, AlarmActivity.class);
+       // mAlarmData = new ArrayList<>();
+
 
 
         //int hour =29;
@@ -106,7 +119,15 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
                         setAlarm(calendar,true);
 
                 }
+
             }
+            String AMPM = "  AM";
+            if(alarm.getAM_PM() == 1)
+                AMPM = "  PM";
+            String alarmData = alarm.getAlarmName() + "  " + Integer.toString(alarm.getHour())+":"+Integer.toString(alarm.getMinute()) + AMPM;
+            mAlarmData.add(alarmData);
+
+
 
         }
         else{
@@ -161,7 +182,8 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            speak();
+            Intent intent = new Intent(this,MapsActivity.class);
+            startActivity(intent);
             return true;
         }
         if(id == R.id.action_addalarm){

@@ -6,4 +6,7 @@
     <string name="alarm_list">Alarm_List</string>
     <string name="add_alarm">Add Alarm</string>
     <string name="title_activity_set_alarm">Set Alarm</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_register">Register</string>
+
 </resources>
