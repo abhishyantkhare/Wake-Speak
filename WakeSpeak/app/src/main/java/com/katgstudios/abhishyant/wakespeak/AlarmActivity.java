@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParsePush;
+import com.parse.ParseUser;
 import com.parse.PushService;
 import com.parse.SaveCallback;
 
@@ -40,6 +41,7 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
     private PendingIntent alarmPendingIntent;
     private ShareActionProvider mShare;
     public static ArrayList<String> mAlarmData = new ArrayList<String>();
+    private ParseUser currentUser = ParseUser.getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +61,11 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
         alarmPendingIntent = PendingIntent.getBroadcast(this,1,alarmIntent,0);
         Intent setAlarmIntent = getIntent();
         addAlarm(setAlarmIntent);
-        //Parse.initialize(this, "KLPNm4OOkvYB3G8AMns1HwiPjNqPzJ0o0M0Nz2jO", "cZbvnOZuTwgONSzaL42LJhi39ENCAkEMp55DpSLA");
+        Parse.initialize(this, "KLPNm4OOkvYB3G8AMns1HwiPjNqPzJ0o0M0Nz2jO", "cZbvnOZuTwgONSzaL42LJhi39ENCAkEMp55DpSLA");
         //PushService.setDefaultPushCallback(this, AlarmActivity.class);
        // mAlarmData = new ArrayList<>();
+        if(currentUser.has("test"))
+            Log.d("PARSE UPDATE USER TEST","has been updated!");
 
 
 
@@ -126,6 +130,15 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
                 AMPM = "  PM";
             String alarmData = alarm.getAlarmName() + "  " + Integer.toString(alarm.getHour())+":"+Integer.toString(alarm.getMinute()) + AMPM;
             mAlarmData.add(alarmData);
+            if(currentUser.has("Alarm List")){
+                ( (ArrayList<AlarmObject>)currentUser.get("Alarm List")).add(alarm);
+
+            }
+            else{
+                Log.d("This is being called","call");
+                currentUser.put("test","testObj");
+                currentUser.saveInBackground();
+            }
 
 
 
@@ -228,8 +241,6 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
     }
 
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
+
 
 }

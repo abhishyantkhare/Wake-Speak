@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.parse.ParseUser;
+
 import java.util.ArrayList;
 
 /**
@@ -28,7 +30,12 @@ public class AlarmFragment extends Fragment{
         mAdapter = new ArrayAdapter(getActivity(),R.layout.alarm_list_items,R.id.alarm_list_textview,new ArrayList());
         View rootView = inflater.inflate(R.layout.fragment_alarm, container, false);
         mAlarmList = (ListView) rootView.findViewById(R.id.alarm_list);
+        ParseUser curentUser = ParseUser.getCurrentUser();
+        if(curentUser.has("AlarmNames")){
+            ArrayList<String> alarmNames = (ArrayList<String>)curentUser.get("AlarmNames");
+            mAdapter.addAll(alarmNames);
 
+        }
         mAlarmList.setAdapter(mAdapter);
         setAlarmDisplay();
 

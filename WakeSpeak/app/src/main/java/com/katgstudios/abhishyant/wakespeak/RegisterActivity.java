@@ -1,5 +1,6 @@
 package com.katgstudios.abhishyant.wakespeak;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,12 @@ import android.os.Build;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SignUpCallback;
+
+import java.util.ArrayList;
 
 
 public class RegisterActivity extends ActionBarActivity {
@@ -76,16 +83,51 @@ public class RegisterActivity extends ActionBarActivity {
             registerButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                if(passwordsMatch())
-                    Log.d("PASSWORD TEST", "passwords match!");
-                else
-                    Toast.makeText(getActivity(),"Passwords do not match!",Toast.LENGTH_LONG).show();
+                if(passwordsMatch()&&nothingNull()) {
+                    Log.d("BUTTON CLICKED","butt is clicked");
+                   final String userEmail = email.getText().toString();
+                    String psswd = password.getText().toString();
+                    ParseUser user = new ParseUser();
+                    user.setUsername(userEmail);
+                    user.setPassword(psswd);
+                   // ArrayList<AlarmObject> alarmList = new ArrayList<AlarmObject>();
+
+
+                   // user.put("Alarm List", alarmList);
+
+                    user.signUpInBackground(new SignUpCallback() {
+
+                        public void done(ParseException e) {
+                            Log.d("PARSE STuFF CALLED","parse stuff is bein callled");
+                            if (e == null) {
+
+                                Intent newUserIntent = new Intent(getActivity(),AlarmActivity.class);
+                                newUserIntent.putExtra("userEmail",userEmail);
+                                startActivity(newUserIntent);
+                            } else {
+                                e.printStackTrace();
+                                // Sign up didn't succeed. Look at the ParseException
+                                // to figure out what went wrong
+                            }
+                        }
+                    });
+                }
+                else if(nothingNull()){
+                    Toast.makeText(getActivity(), "Passwords do not match!", Toast.LENGTH_LONG).show();
+
+                }
+                else{
+                    Toast.makeText(getActivity(), "All fields must be filled in!", Toast.LENGTH_LONG).show();
+                }
                 }
             });
             return rootView;
         }
         private boolean passwordsMatch(){
             return password.getText().toString().equals(passwordConfirm.getText().toString());
+        }
+        private boolean nothingNull(){
+            return !(email.getText().equals("") || password.getText().toString().equals("") || passwordConfirm.getText().toString().equals(""));
         }
     }
 }
