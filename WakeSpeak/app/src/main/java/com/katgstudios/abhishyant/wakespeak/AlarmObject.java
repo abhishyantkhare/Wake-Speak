@@ -3,12 +3,22 @@ package com.katgstudios.abhishyant.wakespeak;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.parse.Parse;
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
+
 import java.util.ArrayList;
 
 /**
  * Created by abhishyant on 4/6/15.
  */
-public class AlarmObject implements Parcelable{
+@ParseClassName("AlarmObject")
+public class AlarmObject extends ParseObject implements Parcelable{
+
+    public AlarmObject(){}
+
+
+
     public String getAlarmName() {
         return alarmName;
     }

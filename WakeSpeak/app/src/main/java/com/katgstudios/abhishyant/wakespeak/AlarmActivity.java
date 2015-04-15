@@ -6,32 +6,26 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.provider.AlarmClock;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.support.v7.widget.ShareActionProvider;
 import android.widget.Toast;
 
 import com.parse.Parse;
-import com.parse.ParseException;
-import com.parse.ParsePush;
+import com.parse.ParseClassName;
 import com.parse.ParseUser;
-import com.parse.PushService;
 import com.parse.SaveCallback;
 
+import java.lang.reflect.Array;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -40,12 +34,14 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
     private TextToSpeech mTTS;
     private PendingIntent alarmPendingIntent;
     private ShareActionProvider mShare;
-    public static ArrayList<String> mAlarmData = new ArrayList<String>();
+    public static ArrayList<String> mAlarmNames = new ArrayList<String>();
+
     private ParseUser currentUser = ParseUser.getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Parse.initialize(this, "KLPNm4OOkvYB3G8AMns1HwiPjNqPzJ0o0M0Nz2jO", "cZbvnOZuTwgONSzaL42LJhi39ENCAkEMp55DpSLA");
 
         setContentView(R.layout.activity_alarm);
         if (savedInstanceState == null) {
@@ -61,11 +57,9 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
         alarmPendingIntent = PendingIntent.getBroadcast(this,1,alarmIntent,0);
         Intent setAlarmIntent = getIntent();
         addAlarm(setAlarmIntent);
-        Parse.initialize(this, "KLPNm4OOkvYB3G8AMns1HwiPjNqPzJ0o0M0Nz2jO", "cZbvnOZuTwgONSzaL42LJhi39ENCAkEMp55DpSLA");
+
         //PushService.setDefaultPushCallback(this, AlarmActivity.class);
-       // mAlarmData = new ArrayList<>();
-        if(currentUser.has("test"))
-            Log.d("PARSE UPDATE USER TEST","has been updated!");
+       // mAlarmNames = new ArrayList<>();
 
 
 
@@ -129,16 +123,42 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
             if(alarm.getAM_PM() == 1)
                 AMPM = "  PM";
             String alarmData = alarm.getAlarmName() + "  " + Integer.toString(alarm.getHour())+":"+Integer.toString(alarm.getMinute()) + AMPM;
-            mAlarmData.add(alarmData);
-            if(currentUser.has("Alarm List")){
-                ( (ArrayList<AlarmObject>)currentUser.get("Alarm List")).add(alarm);
+            mAlarmNames.add(alarmData);
+
+
+            if(currentUser.has("AlarmList")){
+                Toast.makeText(AlarmActivity.this,"HAS LIST",Toast.LENGTH_LONG).show();
+                ( (ArrayList<AlarmObject>)currentUser.get("AlarmList")).add(alarm);
+
+            //    currentUser.saveInBackground();
 
             }
-            else{
-                Log.d("This is being called","call");
-                currentUser.put("test","testObj");
-                currentUser.saveInBackground();
+            if(currentUser.has("AlarmNames")){
+                ((ArrayList<String>)currentUser.get("AlarmNames")).add(alarmData);
+            //    currentUser.saveInBackground();
             }
+            else{
+                Log.d("ALARM ACTIVITY","new objects being created");
+                currentUser.put("AlarmNames", mAlarmNames);
+                ArrayList<AlarmObject> alarmList = new ArrayList<AlarmObject>();
+                alarmList.add(alarm);
+
+                currentUser.put("AlarmList", alarmList);
+           //     currentUser.saveInBackground();
+//
+            }
+            currentUser.put("test1", "test");
+
+           currentUser.saveInBackground(new SaveCallback() {
+               @Override
+               public void done(com.parse.ParseException e) {
+                   if(e == null)
+                    Log.d("ALARM ACTIVITY","DONE SAVING");
+                   else
+                    e.printStackTrace();
+               }
+           });
+
 
 
 

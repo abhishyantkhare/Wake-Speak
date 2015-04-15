@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.parse.ParseUser;
 
@@ -31,13 +32,18 @@ public class AlarmFragment extends Fragment{
         View rootView = inflater.inflate(R.layout.fragment_alarm, container, false);
         mAlarmList = (ListView) rootView.findViewById(R.id.alarm_list);
         ParseUser curentUser = ParseUser.getCurrentUser();
+        if(curentUser.has("test1")){
+            Log.d("CURRENT USER","HAS TEST");
+        }
         if(curentUser.has("AlarmNames")){
+            Toast.makeText(getActivity(), "HAS ALARMS", Toast.LENGTH_LONG).show();
             ArrayList<String> alarmNames = (ArrayList<String>)curentUser.get("AlarmNames");
             mAdapter.addAll(alarmNames);
+            Log.d("ALARM FRAGMENT CHECK", "has alarm names");
 
         }
         mAlarmList.setAdapter(mAdapter);
-        setAlarmDisplay();
+        //setAlarmDisplay();
 
 
 
@@ -50,7 +56,7 @@ public class AlarmFragment extends Fragment{
         //Log.d("ALARMLIST",newAlarmList.get(0));
 
         mAdapter.clear();
-        mAdapter.addAll(AlarmActivity.mAlarmData);
+        mAdapter.addAll(AlarmActivity.mAlarmNames);
        // Log.d("ADAPTER",mAdapter.getItem(0).toString());
         mAlarmList.setAdapter(mAdapter);
 
