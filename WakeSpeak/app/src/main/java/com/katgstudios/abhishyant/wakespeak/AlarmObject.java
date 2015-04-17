@@ -59,12 +59,23 @@ public class AlarmObject extends ParseObject implements Parcelable{
 
 
     }
+    public String formatTime(){
+        String hourStr = Integer.toString(hour)+":";
+        String minStr = Integer.toString(minute);
+        if(minute<10)
+            minStr = "0"+minStr+" ";
+        String am_pmStr = "AM";
+        if(AM_PM == 1)
+            am_pmStr = "PM";
+        return alarmName + hourStr+minStr+am_pmStr;
+    }
 
     //Code for Parcelable
     public int describeContents(){
 
         return 0;
     }
+
     public void writeToParcel(Parcel out, int flags){
         out.writeString(alarmName);
         out.writeBooleanArray(weekDays);

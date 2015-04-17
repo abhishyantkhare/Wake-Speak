@@ -60,6 +60,7 @@
         <activity
             android:name=".SetAlarmActivity"
             android:label="@string/title_activity_set_alarm"
+            android:theme="@style/RegisterActionBarTheme"
             android:parentActivityName=".AlarmActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -122,7 +123,10 @@
         <activity
             android:name=".RegisterActivity"
             android:label="@string/title_activity_register"
-            android:parentActivityName=".LoginActivity" >
+            android:parentActivityName=".LoginActivity"
+            android:theme="@style/BlueActionBarTheme"
+
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.katgstudios.abhishyant.wakespeak.LoginActivity" />

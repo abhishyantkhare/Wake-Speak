@@ -3,6 +3,20 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+
     </style>
+    <style name="RegisterActionBarTheme"
+        parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/BlueActionBarTheme</item>
+        <item name="actionBarStyle">@style/BlueActionBarTheme</item>
+    </style>
+
+
+
+        <style name="BlueActionBarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+            <item name="android:background">#0070B8</item>
+
+        </style>
+
 
 </resources>

@@ -1,6 +1,8 @@
 package com.katgstudios.abhishyant.wakespeak;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseException;
@@ -76,6 +79,13 @@ public class RegisterActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_register, container, false);
+            rootView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            TextView emailLabel = (TextView) rootView.findViewById(R.id.emaillabel);
+            emailLabel.setBackgroundColor(Color.WHITE);
+            TextView passLabel1 = (TextView) rootView.findViewById(R.id.passLabel1);
+            passLabel1.setBackgroundColor(Color.WHITE);
+            TextView passLabel2 = (TextView) rootView.findViewById(R.id.passLabel2);
+            passLabel2.setBackgroundColor(Color.WHITE);
             email = (EditText)rootView.findViewById(R.id.emailText);
             password = (EditText)rootView.findViewById(R.id.passText);
             passwordConfirm = (EditText) rootView.findViewById(R.id.passTextConfirm);
@@ -84,7 +94,7 @@ public class RegisterActivity extends ActionBarActivity {
                 @Override
                 public void onClick(View v) {
                 if(passwordsMatch()&&nothingNull()) {
-                    Log.d("BUTTON CLICKED","butt is clicked");
+
                    final String userEmail = email.getText().toString();
                     String psswd = password.getText().toString();
                     ParseUser user = new ParseUser();
@@ -113,11 +123,11 @@ public class RegisterActivity extends ActionBarActivity {
                     });
                 }
                 else if(nothingNull()){
-                    Toast.makeText(getActivity(), "Passwords do not match!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity().getApplicationContext(), "Passwords do not match!", Toast.LENGTH_LONG).show();
 
                 }
                 else{
-                    Toast.makeText(getActivity(), "All fields must be filled in!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity().getApplicationContext(), "All fields must be filled in!", Toast.LENGTH_LONG).show();
                 }
                 }
             });

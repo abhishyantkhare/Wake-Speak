@@ -1,11 +1,15 @@
 package com.katgstudios.abhishyant.wakespeak;
 
+import android.support.v7.app.ActionBar;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -42,6 +46,8 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Parse.initialize(this, "KLPNm4OOkvYB3G8AMns1HwiPjNqPzJ0o0M0Nz2jO", "cZbvnOZuTwgONSzaL42LJhi39ENCAkEMp55DpSLA");
+        ActionBar bar = (ActionBar)getSupportActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0070B8")));
 
         setContentView(R.layout.activity_alarm);
         if (savedInstanceState == null) {
@@ -70,6 +76,10 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
         registerReceiver(receiver, new IntentFilter("SPEAK"));
     }
 
+    public void showDeleteAlarm(){
+
+    }
+
     public void setAlarm(Calendar calendar,boolean isRepeating){
         int weekDay = calendar.get(Calendar.DAY_OF_WEEK);
         int hour = calendar.get(Calendar.HOUR);
@@ -94,6 +104,7 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
         if(isRepeating)
         manager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 alarmPendingIntent);
+
         else
             manager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),repeat,alarmPendingIntent);
 
@@ -119,10 +130,8 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
                 }
 
             }
-            String AMPM = "  AM";
-            if(alarm.getAM_PM() == 1)
-                AMPM = "  PM";
-            String alarmData = alarm.getAlarmName() + "  " + Integer.toString(alarm.getHour())+":"+Integer.toString(alarm.getMinute()) + AMPM;
+
+            String alarmData = formatTime(alarm.getAlarmName(),alarm.getHour(),alarm.getMinute(),alarm.getAM_PM());
             mAlarmNames.add(alarmData);
 
 
@@ -167,6 +176,16 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
             Log.d("Alarm Activity","INTENT NULL");
         }
 
+    }
+    public String formatTime(String alarmName,int hour, int min, int am_pm){
+        String hourStr = Integer.toString(hour)+":";
+        String minStr = Integer.toString(min);
+        if(min<10)
+            minStr = "0"+minStr+" ";
+        String am_pmStr = "AM";
+        if(am_pm == 1)
+            am_pmStr = "PM";
+        return alarmName + hourStr+minStr+am_pmStr;
     }
 
 
@@ -226,7 +245,7 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
         }
         if(id==R.id.menu_item_share){
 
-            Log.d("CLicke, ","SHARING");
+
 
             return true;
         }
