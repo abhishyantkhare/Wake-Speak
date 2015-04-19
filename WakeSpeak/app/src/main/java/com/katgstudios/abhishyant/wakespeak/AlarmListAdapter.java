@@ -14,15 +14,14 @@ import java.util.ArrayList;
 /**
  * Created by abhishyant on 4/16/15.
  */
-public class AlarmListAdapter extends ArrayAdapter<AlarmObject> {
+public class AlarmListAdapter extends ArrayAdapter<String> {
       Context context;
     int layoutResourceId;
-     ArrayList<AlarmObject> alarmObjectArrayList;
+     ArrayList<String> alarmObjectArrayList = new ArrayList<>();
 
-    public AlarmListAdapter(Context _context,ArrayList<AlarmObject> data){
+    public AlarmListAdapter(Context _context,ArrayList<String> data){
         super(_context,R.layout.alarm_list_items,data);
         context=_context;
-
         alarmObjectArrayList = data;
     }
     @Override
@@ -31,11 +30,31 @@ public class AlarmListAdapter extends ArrayAdapter<AlarmObject> {
         View rowView = inflater.inflate(R.layout.alarm_list_items,parent,false);
         TextView alarmName = (TextView)rowView.findViewById(R.id.alarm_name);
         TextView alarmTime = (TextView)rowView.findViewById(R.id.alarm_time);
-        if(alarmObjectArrayList.size()>1)
-        Log.d("ADAPTER","stuff");
-        alarmName.setText(alarmObjectArrayList.get(position).getAlarmName());
-        alarmTime.setText(alarmObjectArrayList.get(position).formatTime());
+        TextView days = (TextView) rowView.findViewById(R.id.days);
+        int spcIndx = timeIndex(alarmObjectArrayList.get(position))-1;
+        String nameanddays = alarmObjectArrayList.get(position).substring(spcIndx+1);
+        Log.d("name and days",nameanddays);
+        int daysIndx = nameanddays.indexOf(" ");
+        Log.d("ADAPTER",Integer.toString(daysIndx));
+
+        alarmName.setText(alarmObjectArrayList.get(position).substring(0,spcIndx));
+        Log.d("name",alarmName.getText().toString());
+        alarmTime.setText(nameanddays.substring(0,daysIndx));
+        Log.d("time",alarmTime.getText().toString());
+        days.setText(nameanddays.substring(daysIndx+1));
+        Log.d("days",days.getText().toString());
         return rowView;
 
+    }
+    public boolean isNumeric(String str)
+    {
+        return str.matches("-?\\d+(\\.\\d+)?");  //match a number with optional '-' and decimal.
+    }
+    public int timeIndex(String str){
+        for(int i = 0; i < str.length();i++){
+            if(isNumeric(str.substring(i,i+1)))
+                return i;
+        }
+        return str.length()-1;
     }
 }

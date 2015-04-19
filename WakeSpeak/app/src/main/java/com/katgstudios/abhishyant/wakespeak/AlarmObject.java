@@ -67,7 +67,7 @@ public class AlarmObject extends ParseObject implements Parcelable{
         String am_pmStr = "AM";
         if(AM_PM == 1)
             am_pmStr = "PM";
-        return alarmName + hourStr+minStr+am_pmStr;
+        return  hourStr+minStr+am_pmStr;
     }
 
     //Code for Parcelable

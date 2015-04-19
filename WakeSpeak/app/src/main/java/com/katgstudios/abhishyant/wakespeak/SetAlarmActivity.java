@@ -1,6 +1,8 @@
 package com.katgstudios.abhishyant.wakespeak;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -34,6 +36,8 @@ public class SetAlarmActivity extends ActionBarActivity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+        ActionBar bar = (ActionBar)getSupportActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0070B8")));
     }
 
 

@@ -31,18 +31,17 @@ public class AlarmFragment extends Fragment{
 
 
 
-        mAdapter = new AlarmListAdapter(getActivity(),new ArrayList<AlarmObject>());
+        mAdapter = new AlarmListAdapter(getActivity(),new ArrayList<
+                String>());
         View rootView = inflater.inflate(R.layout.fragment_alarm, container, false);
         mAlarmList = (ListView) rootView.findViewById(R.id.alarm_list);
         ParseUser curentUser = ParseUser.getCurrentUser();
-        if(curentUser.has("test1")){
-            Log.d("CURRENT USER","HAS TEST");
-        }
-        if(curentUser.has("AlarmList")){
-            Toast.makeText(getActivity(), "HAS ALARMS", Toast.LENGTH_LONG).show();
-            ArrayList<AlarmObject> alarmObjects = (ArrayList<AlarmObject>)curentUser.get("AlarmList");
+
+        if(curentUser.has("AlarmNames")){
+            //Toast.makeText(getActivity(), "HAS ALARMS", Toast.LENGTH_LONG).show();
+            ArrayList<String> alarmObjects = (ArrayList<String>)curentUser.get("AlarmNames");
             mAdapter.addAll(alarmObjects);
-            Log.d("ALARM FRAGMENT CHECK", alarmObjects.get(0).formatTime());
+            //Log.d("ALARM FRAGMENT CHECK", alarmObjects.get(0).formatTime());
 
         }
         mAlarmList.setAdapter(mAdapter);

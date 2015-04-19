@@ -6,7 +6,7 @@
         android:title="@string/action_settings"
         android:orderInCategory="10"
         app:showAsAction="always"
-        android:icon= "@drawable/ic_action_settings"
+        android:icon= "@drawable/map"
         />
     <item
         android:id="@+id/action_addalarm"

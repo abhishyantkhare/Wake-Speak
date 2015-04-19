@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.parse.Parse;
 import com.parse.ParseClassName;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -39,12 +40,15 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
     private PendingIntent alarmPendingIntent;
     private ShareActionProvider mShare;
     public static ArrayList<String> mAlarmNames = new ArrayList<String>();
+    String[] days = {"S ","M ","T ","W ","Th ","F ","S"};
 
     private ParseUser currentUser = ParseUser.getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ParseObject.registerSubclass(AlarmObject.class);
         Parse.initialize(this, "KLPNm4OOkvYB3G8AMns1HwiPjNqPzJ0o0M0Nz2jO", "cZbvnOZuTwgONSzaL42LJhi39ENCAkEMp55DpSLA");
         ActionBar bar = (ActionBar)getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#0070B8")));
@@ -59,6 +63,19 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
         Intent checkTTSIntent = new Intent();
         checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkTTSIntent, MY_DATA_CHECK_CODE);
+        Log.d("ALARM ACTIVITY",currentUser.getUsername());
+        if(currentUser.has("AlarmList")){
+
+
+            ArrayList<AlarmObject> list = (ArrayList<AlarmObject>)currentUser.get("AlarmList");
+
+                try {
+                    Log.d("ALARM ACTIVITY", list.get(list.size()-1).getAlarmName());
+                }
+                catch (NullPointerException e){
+                    e.printStackTrace();
+                }
+        }
         Intent alarmIntent = new Intent(this,AlarmReceiver.class);
         alarmPendingIntent = PendingIntent.getBroadcast(this,1,alarmIntent,0);
         Intent setAlarmIntent = getIntent();
@@ -114,9 +131,10 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
     public void addAlarm(Intent setAlarmIntent){
         if(setAlarmIntent.getParcelableExtra("Alarm") != null) {
             AlarmObject alarm = setAlarmIntent.getParcelableExtra("Alarm");
+            String alarmData = " ";
             for(int i = 0; i <7;i++) {
                 if(alarm.getWeekDays()[i]) {
-
+                    alarmData += days[i];
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(Calendar.HOUR, alarm.getHour());
                     calendar.set(Calendar.MINUTE, alarm.getMinute());
@@ -131,12 +149,14 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
 
             }
 
-            String alarmData = formatTime(alarm.getAlarmName(),alarm.getHour(),alarm.getMinute(),alarm.getAM_PM());
+            alarmData = formatTime(alarm.getAlarmName(),alarm.getHour(),alarm.getMinute(),alarm.getAM_PM()) + alarmData;
+            Log.d("ADD ALARM",alarmData);
             mAlarmNames.add(alarmData);
 
 
             if(currentUser.has("AlarmList")){
-                Toast.makeText(AlarmActivity.this,"HAS LIST",Toast.LENGTH_LONG).show();
+                //Toast.makeText(AlarmActivity.this,"HAS LIST",Toast.LENGTH_LONG).show();
+
                 ( (ArrayList<AlarmObject>)currentUser.get("AlarmList")).add(alarm);
 
             //    currentUser.saveInBackground();
@@ -147,22 +167,27 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
             //    currentUser.saveInBackground();
             }
             else{
-                Log.d("ALARM ACTIVITY","new objects being created");
+                Log.d("ALARM ACTIVITY", "new objects being created");
                 currentUser.put("AlarmNames", mAlarmNames);
                 ArrayList<AlarmObject> alarmList = new ArrayList<AlarmObject>();
                 alarmList.add(alarm);
+              //  ArrayList<String> alarmIDs = new ArrayList<>();
+                //alarmIDs.add(alarm.getObjectId());
+                //ParseObject alarmz = new ParseObject("AlarmObject");
+
 
                 currentUser.put("AlarmList", alarmList);
            //     currentUser.saveInBackground();
 //
             }
-            currentUser.put("test1", "test");
+          //  currentUser.put("test1", "test");
 
            currentUser.saveInBackground(new SaveCallback() {
                @Override
                public void done(com.parse.ParseException e) {
-                   if(e == null)
-                    Log.d("ALARM ACTIVITY","DONE SAVING");
+                   if(e == null){
+                    int size = ((ArrayList<AlarmObject>)currentUser.get("AlarmList")).size();
+                    Log.d("ALARM ACTIVITY",((ArrayList<AlarmObject>)currentUser.get("AlarmList")).get(size-1).getAlarmName());}
                    else
                     e.printStackTrace();
                }
@@ -185,7 +210,7 @@ public class AlarmActivity extends ActionBarActivity implements OnInitListener{
         String am_pmStr = "AM";
         if(am_pm == 1)
             am_pmStr = "PM";
-        return alarmName + hourStr+minStr+am_pmStr;
+        return alarmName +" " + hourStr+minStr+am_pmStr;
     }
 
 

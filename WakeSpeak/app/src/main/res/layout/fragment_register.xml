@@ -45,6 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/passLabel1"
+        android:inputType="textPassword"
         android:id="@+id/passText"
 
         />
@@ -60,6 +61,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textPassword"
         android:layout_below="@+id/passLabel2"
         android:id="@+id/passTextConfirm"
 
